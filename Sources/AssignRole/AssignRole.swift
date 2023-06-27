@@ -16,8 +16,7 @@ struct AssignRole: AsyncParsableCommand {
     
     mutating func run() async throws {
         let fileManager = FileManager.default
-        let libraryPath = fi
-        let filePath = NSHomeDirectory() + "/Data/data.csv"
+        let filePath = NSHomeDirectory() + "/Library/AssignRole/data.csv"
         let csv = "name,isDone,isBigginer\r\taro,true,true\r\n"
         let data = csv.data(using: .utf8)
         
@@ -34,23 +33,26 @@ struct AssignRole: AsyncParsableCommand {
             if !fileManager.fileExists(atPath: filePath) {
                 do {
                     try fileManager.createDirectory(
-                        atPath: "/Data",
+                        atPath: NSHomeDirectory() + "/Library/AssignRole",
                         withIntermediateDirectories: false,
-                        attributes: [
-                            FileAttributeKey.posixPermissions: 0o777,
-                        ]
+                        attributes: nil
                     )
-                    if !fileManager.createFile(
+                } catch let error {
+                    print("error! \(error)")
+                }
+                
+                do {
+                    try fileManager.createFile(
                         atPath: filePath,
                         contents: data,
                         attributes: nil
-                    ) {
-                        print("Create file error")
-                    }
+                    )
+                } catch let error {
+                    print("error! \(error)")
                 }
             }
             
-//            try csv.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+            try csv.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
             
         } catch let error {
             print("error! \(error)")
