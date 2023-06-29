@@ -16,6 +16,9 @@ struct AssignRole: AsyncParsableCommand {
     @Option(name: .shortAndLong, help: "Add new member.")
     var newface: String?
     
+    @Option(name: .shortAndLong, help: "Remove member.")
+    var remove: String?
+    
     @Option(name: .shortAndLong, help: "Number of people you would like to assign to the role")
     var pick: Int?
     
@@ -68,6 +71,17 @@ struct AssignRole: AsyncParsableCommand {
             
             if members.isEmpty {
                 fatalError("Member is not exist. Please add member with --newface command.")
+            }
+            
+            if let remove = remove {
+                // 存在チェック
+                if members.filter{ $0.name == remove }.count == 0 {
+                    fatalError("The member is not found")
+                }
+                if let index = members.firstIndex(where: { $0.name == remove }) {
+                    members.remove(at: index)
+                }
+                print("Delete completed!")
             }
             
             if let pick = pick {
