@@ -13,49 +13,46 @@ struct AssignRole: AsyncParsableCommand {
         version: "0.1.0"
     )
     
-    
     mutating func run() async throws {
         let fileManager = FileManager.default
-        let filePath = NSHomeDirectory() + "/Library/AssignRole/data.csv"
-        let csv = "name,isDone,isBigginer\r\taro,true,true\r\n"
-        let data = csv.data(using: .utf8)
+        let libraryPath = NSHomeDirectory() + "/Library"
+        let filePath = "/AssignRole/data.json"
+                
+        var user = User(name: "fuga", isDone: true)
         
-        print("current directory is \(filePath)")
+        print("current directory is \(libraryPath + filePath)")
         
         // ファイル書き込み
         do {
-            if !fileManager.fileExists(atPath: filePath) {
-                if !isDirectory(at: NSHomeDirectory() + "/Library/AssignRole") {
+            if !fileManager.fileExists(atPath: libraryPath + filePath) {
+                if !isDirectory(at: libraryPath + "/AssignRole") {
                     do {
                         try fileManager.createDirectory(
-                            atPath: NSHomeDirectory() + "/Library/AssignRole",
+                            atPath: libraryPath + "/AssignRole",
                             withIntermediateDirectories: false,
                             attributes: nil
                         )
-                    } catch let error {
+                    } catch {
                         print("error! \(error)")
                     }
                 }
                 
-                
                 do {
                     try fileManager.createFile(
-                        atPath: filePath,
-                        contents: data,
+                        atPath: libraryPath + filePath,
+                        contents: nil,
                         attributes: nil
                     )
-                } catch let error {
+                } catch {
                     print("error! \(error)")
                 }
             }
             
-            try csv.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+            write(user, to: filePath)
             
-        } catch let error {
+        } catch {
             print("error! \(error)")
         }
-        
-        print(data)
     }
     
     func isDirectory(at path: String) -> Bool {
@@ -63,16 +60,27 @@ struct AssignRole: AsyncParsableCommand {
         FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
         return isDirectory.boolValue
     }
+    
+    func write(_ user: User, to path: String) {
+        do {
+            guard let libraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first else {
+                fatalError("ライブラリURL取得エラー")
+            }
+            let fileURL = libraryURL.appendingPathComponent(path)
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            guard let json = try? encoder.encode(user) else {
+                fatalError("JSONエンコードエラー")
+            }
+            
+            try json.write(to: fileURL)
+        } catch {
+            print("error! \(error)")
+        }
+    }
 }
 
-struct User {
+struct User: Codable {
     let name: String
     let isDone: Bool
-    let isBigginer: Bool
-    
-    init(_ name: String, _ isDone: Bool, _ isBigginer: Bool) {
-        self.name = name
-        self.isDone = isDone
-        self.isBigginer = isBigginer
-    }
 }
