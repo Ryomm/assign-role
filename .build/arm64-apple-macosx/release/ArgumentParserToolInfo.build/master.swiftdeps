@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)"
+options: "96d70bc93f58f9ac9bce78623faf593b70dc756796ff294fce9f63bf0cd4ecee"
+build_start_time: [1688020862, 94149000]
+build_end_time: [1688020862, 855184000]
+inputs:
+  "/Users/sci02122/src/assign-role/.build/checkouts/swift-argument-parser/Sources/ArgumentParserToolInfo/ToolInfo.swift": [1688020858, 997080634]

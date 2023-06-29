@@ -1,0 +1,4 @@
+module ArgumentParser {
+    header "/Users/sci02122/src/assign-role/.build/arm64-apple-macosx/release/ArgumentParser.build/ArgumentParser-Swift.h"
+    requires objc
+}
