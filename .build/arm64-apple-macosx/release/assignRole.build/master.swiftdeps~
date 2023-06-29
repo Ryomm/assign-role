@@ -1,6 +1,0 @@
-version: "Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)"
-options: "ecf7f5b7260e5ad37832f56b92c4db344a0f95f5dd93900c16ad4d1df9d4c0fa"
-build_start_time: [1688020871, 313969000]
-build_end_time: [1688020873, 390849000]
-inputs:
-  "/Users/sci02122/src/assign-role/Sources/assignRole/AssignRole.swift": !dirty [1688020656, 779389035]
