@@ -22,24 +22,21 @@ struct AssignRole: AsyncParsableCommand {
         
         print("current directory is \(filePath)")
         
-//        if !fileManager.fileExists(atPath: filePath) {
-//            fileManager.createFile(atPath: filePath, contents: data, attributes: [:])
-//        } else {
-//            print("already exist")
-//        }
-        
         // ファイル書き込み
         do {
             if !fileManager.fileExists(atPath: filePath) {
-                do {
-                    try fileManager.createDirectory(
-                        atPath: NSHomeDirectory() + "/Library/AssignRole",
-                        withIntermediateDirectories: false,
-                        attributes: nil
-                    )
-                } catch let error {
-                    print("error! \(error)")
+                if !isDirectory(at: NSHomeDirectory() + "/Library/AssignRole") {
+                    do {
+                        try fileManager.createDirectory(
+                            atPath: NSHomeDirectory() + "/Library/AssignRole",
+                            withIntermediateDirectories: false,
+                            attributes: nil
+                        )
+                    } catch let error {
+                        print("error! \(error)")
+                    }
                 }
+                
                 
                 do {
                     try fileManager.createFile(
@@ -59,6 +56,12 @@ struct AssignRole: AsyncParsableCommand {
         }
         
         print(data)
+    }
+    
+    func isDirectory(at path: String) -> Bool {
+        var isDirectory: ObjCBool = false
+        FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
+        return isDirectory.boolValue
     }
 }
 
